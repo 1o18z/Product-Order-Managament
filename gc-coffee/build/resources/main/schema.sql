@@ -1,41 +1,23 @@
 DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS orders CASCADE;
-DROP TABLE IF EXISTS order_items CASCADE;
 
 CREATE TABLE products
 (
-    product_id   BINARY(16) PRIMARY KEY,
+    product_id   VARCHAR(16) PRIMARY KEY,
     product_name VARCHAR(20) NOT NULL,
     category     VARCHAR(50) NOT NULL,
     price        BIGINT      NOT NULL,
     description  VARCHAR(500) DEFAULT NULL,
-    created_at   TIMESTAMP   NOT NULL,
-    updated_at   TIMESTAMP    DEFAULT NULL
+    created_at   TIMESTAMP   NOT NULL
 );
 
 CREATE TABLE orders
 (
-    order_id     BINARY(16) PRIMARY KEY,
+    order_id     VARCHAR(16) PRIMARY KEY,
     email        VARCHAR(50)  NOT NULL,
     address      VARCHAR(200) NOT NULL,
-    postcode     VARCHAR(200) NOT NULL,
+    menu         VARCHAR(16)  NOT NULL,
+    quantity     INT          NOT NULL,
     order_status VARCHAR(50)  NOT NULL,
-    created_at   TIMESTAMP    NOT NULL,
-    updated_at   TIMESTAMP DEFAULT NULL
+    created_at   TIMESTAMP    NOT NULL
 );
-
-CREATE TABLE order_items
-(
-    seq        BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_id   BINARY(16) NOT NULL,
-    product_id BINARY(16) NOT NULL,
-    category   VARCHAR(50) NOT NULL,
-    price      BIGINT      NOT NULL,
-    quantity   INT         NOT NULL,
-    created_at TIMESTAMP   NOT NULL,
-    updated_at TIMESTAMP DEFAULT NULL,
-    CONSTRAINT fk_order_items_to_order FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
-    CONSTRAINT fk_order_items_to_product FOREIGN KEY (product_id) REFERENCES products (product_id)
-);
-
-CREATE INDEX idx_order_id ON order_items (order_id);
