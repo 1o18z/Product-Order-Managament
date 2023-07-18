@@ -1,61 +1,68 @@
 package com.example.gccoffee.model;
 
+import com.example.gccoffee.dto.product.ProductMapper;
+import com.example.gccoffee.dto.product.ProductResponseDto;
+import com.example.gccoffee.dto.product.ProductUpdateDto;
 import com.example.gccoffee.repository.ProductJdbcRepository;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.gccoffee.service.ProductService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 @SpringBootTest
 class ProductJdbcRepositoryTest {
 
-  @Autowired
-  ProductJdbcRepository productJdbcRepository;
+  private final ProductJdbcRepository productJdbcRepository;
+  private final ProductMapper productMapper;
+  private final ProductService productService;
 
-  private static final Product newProduct = new Product(UUID.randomUUID(), "new-product", Category.COFFEE_BEAN_PACKAGE, 1000L);
+  public ProductJdbcRepositoryTest(ProductJdbcRepository productJdbcRepository, ProductMapper productMapper, ProductService productService) {
+    this.productJdbcRepository = productJdbcRepository;
+    this.productMapper = productMapper;
+    this.productService = productService;
+  }
+
+  private static final Product newProduct = new Product(UUID.randomUUID(), "아메리카노", Category.COFFEE, 5000, "아메리카농농농");
+  private static final int INSERT_TEST_RESULT_SIZE = 1;
 
   @Test
   @DisplayName("상품을 추가할 수 있다.")
-  void testInsert() {
+  void insertProduct_Success() {
     productJdbcRepository.insert(newProduct);
     var all = productJdbcRepository.findAll();
-    assertThat(all.isEmpty(), is(false));
+    Assertions.assertEquals(all.size(), INSERT_TEST_RESULT_SIZE);
   }
 
   @Test
   @DisplayName("상품을 이름으로 조회할 수 있다.")
-  void testFindByName() {
-    var product = productJdbcRepository.findByName(newProduct.getProductName());
-    assertThat(product.isEmpty(), is(false));
+  void findByName_Success() {
+    var product = productJdbcRepository.findByName(newProduct.getName());
+    Assertions.assertFalse(product.isEmpty());
   }
 
   @Test
   @DisplayName("상품을 아이디로 조회할 수 있다.")
-  void testFindById() {
+  void findById_Success() {
     var product = productJdbcRepository.findById(newProduct.getProductId());
-    assertThat(product.isEmpty(), is(false));
+    Assertions.assertFalse(product.isEmpty());
   }
 
   @Test
   @DisplayName("상품을 카테고리로 조회할 수 있다.")
-  void testFindByCategory() {
-    var product = productJdbcRepository.findByCategory(Category.COFFEE_BEAN_PACKAGE);
-    assertThat(product.isEmpty(), is(false));
+  void findByCategory_Success() {
+    var product = productJdbcRepository.findByCategory(Category.COFFEE_BEAN);
+    Assertions.assertFalse(product.isEmpty());
   }
 
   @Test
   @DisplayName("상품을 수정할 수 있다.")
-  void testUpdate() {
-    productJdbcRepository.deleteAll();
-    newProduct.setProductName("updated-product");
-    productJdbcRepository.update(newProduct);
-
-    var product = productJdbcRepository.findById(newProduct.getProductId());
-    assertThat(product.isEmpty(), is(false));
-    assertThat(product.get(), samePropertyValuesAs(newProduct));
+  void updateProduct_Success() {
+    ProductUpdateDto updateDto = new ProductUpdateDto(newProduct.getProductId(), "커피콩빵", Category.COFFEE_DESSERT, 3500, "빵빵빵");
+    ProductResponseDto responseDto = productService.update(updateDto);
+    Assertions.assertEquals(updateDto, responseDto);
   }
 
   @Test
@@ -63,6 +70,7 @@ class ProductJdbcRepositoryTest {
   void testDeleteAll() {
     productJdbcRepository.deleteAll();
     var all = productJdbcRepository.findAll();
-    assertThat(all.isEmpty(), is(false));
+    Assertions.assertFalse(all.isEmpty());
   }
+
 }
