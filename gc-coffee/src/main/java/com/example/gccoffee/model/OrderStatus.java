@@ -1,10 +1,12 @@
 package com.example.gccoffee.model;
 
 public enum OrderStatus {
+  ORDER_SUCCESS,
   ACCEPTED,
-  PATYMENT_CONFIRMED,
+  PAYMENT_CONFIRMED,
   READY_FOR_DELIVERY,
   SHIPPED,
   SETTLED,
-  CANCELD
+  CANCELED,
+  ;
 }
