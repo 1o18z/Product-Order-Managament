@@ -1,0 +1,13 @@
+/.idea/.gitignore
+/gc-coffee/src/main/java/com/example/gccoffee/service/DefaultOrderService.java
+/gc-coffee/src/main/java/com/example/gccoffee/service/DefaultProductService.java
+/gc-coffee/src/main/java/com/example/gccoffee/model/Email.java
+/gc-coffee/src/test/java/com/example/gccoffee/model/EmailTest.java
+/.idea/gradle.xml
+/.idea/sonarlint/issuestore/index.pb
+/.idea/jarRepositories.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/rest-api-mission.iml
+/.idea/vcs.xml
+/.idea/*
