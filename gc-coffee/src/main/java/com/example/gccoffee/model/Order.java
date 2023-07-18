@@ -1,35 +1,32 @@
 package com.example.gccoffee.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class Order {
   private final UUID orderId;
-  private final Email email;
-  private String address;
-  private String postcode;
-  private final List<OrderItem> orderItems;
+  private final String email;
+  private final String address;
+  private Product product;
+  private final int quantity;
   private OrderStatus orderStatus;
   private final LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
 
-  public Order(UUID orderId, Email email, String address, String postcode, List<OrderItem> orderItems, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+  public Order(UUID orderId, String email, String address, Product product, int quantity) {
     this.orderId = orderId;
     this.email = email;
     this.address = address;
-    this.postcode = postcode;
-    this.orderItems = orderItems;
-    this.orderStatus = orderStatus;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.product = product;
+    this.quantity = quantity;
+    this.orderStatus = OrderStatus.ORDER_SUCCESS;
+    this.createdAt = LocalDateTime.now();
   }
 
   public UUID getOrderId() {
     return orderId;
   }
 
-  public Email getEmail() {
+  public String getEmail() {
     return email;
   }
 
@@ -37,12 +34,12 @@ public class Order {
     return address;
   }
 
-  public String getPostcode() {
-    return postcode;
+  public Product getProduct() {
+    return product;
   }
 
-  public List<OrderItem> getOrderItems() {
-    return orderItems;
+  public int getQuantity() {
+    return quantity;
   }
 
   public OrderStatus getOrderStatus() {
@@ -51,10 +48,6 @@ public class Order {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
   }
 
 }
