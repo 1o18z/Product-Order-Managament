@@ -2,7 +2,7 @@ package com.example.gccoffee.query;
 
 public class KeyWord {
 
-  static final String INSERT = "INSERT TO ";
+  static final String INSERT = "INSERT INTO ";
   static final String VALUES = " VALUES";
   static final String LEFT_BRACKET = "(";
   static final String RIGHT_BRACKET = ")";

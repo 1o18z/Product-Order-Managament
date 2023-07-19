@@ -6,15 +6,15 @@ public class DeleteQuery {
 
   private final StringBuilder stringBuilder = new StringBuilder();
 
-  public DeleteQuery delete(String sql) {
+  public DeleteQuery delete(String table) {
     stringBuilder
             .append(DELETE)
-            .append(sql);
+            .append(table);
     return this;
   }
 
-  public WhereQuery where() {
-    return new WhereQuery(this.stringBuilder.toString());
+  public WhereQuery where(String condition) {
+    return new WhereQuery(this.stringBuilder.toString()).where(condition);
   }
 
   public String getResult() {
