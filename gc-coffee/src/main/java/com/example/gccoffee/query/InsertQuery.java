@@ -1,10 +1,7 @@
 package com.example.gccoffee.query;
 
-import org.springframework.stereotype.Component;
-
 import static com.example.gccoffee.query.KeyWord.*;
 
-@Component
 public class InsertQuery {
 
   private final StringBuilder stringBuilder = new StringBuilder();

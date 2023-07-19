@@ -1,11 +1,8 @@
 package com.example.gccoffee.query;
 
-import org.springframework.stereotype.Component;
-
 import static com.example.gccoffee.query.KeyWord.FROM;
 import static com.example.gccoffee.query.KeyWord.SELECT;
 
-@Component
 public class SelectQuery {
 
   private final StringBuilder stringBuilder = new StringBuilder();

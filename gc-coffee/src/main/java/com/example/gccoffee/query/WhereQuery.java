@@ -1,10 +1,7 @@
 package com.example.gccoffee.query;
 
-import org.springframework.stereotype.Component;
-
 import static com.example.gccoffee.query.KeyWord.WHERE;
 
-@Component
 public class WhereQuery {
 
   private final StringBuilder stringBuilder = new StringBuilder();

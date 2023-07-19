@@ -1,11 +1,8 @@
 package com.example.gccoffee.query;
 
-import org.springframework.stereotype.Component;
-
 import static com.example.gccoffee.query.KeyWord.SET;
 import static com.example.gccoffee.query.KeyWord.UPDATE;
 
-@Component
 public class UpdateQuery {
 
   private final StringBuilder stringBuilder = new StringBuilder();
