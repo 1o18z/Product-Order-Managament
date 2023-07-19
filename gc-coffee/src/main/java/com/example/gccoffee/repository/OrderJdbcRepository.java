@@ -63,7 +63,7 @@ public class OrderJdbcRepository implements OrderRepository {
                   UUID.fromString(resultSet.getString("productId")),
                   resultSet.getString("name"),
                   Category.valueOf(resultSet.getString("category")),
-                  resultSet.getLong("price"),
+                  resultSet.getInt("price"),
                   resultSet.getString("description")
           );
 
