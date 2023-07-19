@@ -29,20 +29,20 @@ public class OrderService {
   public OrderResponseDto create(OrderCreateDto orderCreateDto) {
     Order createdOrder = orderMapper.toOrder(orderCreateDto);
     Order savedOrder = orderRepository.insert(createdOrder);
-    return orderMapper.mapToResponse(savedOrder);
+    return orderMapper.toResponse(savedOrder);
   }
 
   public List<OrderResponseDto> findAll() {
     return orderRepository.findAll()
             .stream()
-            .map(orderMapper::mapToResponse)
+            .map(orderMapper::toResponse)
             .toList();
   }
 
   public OrderResponseDto findById(UUID orderId) {
     Optional<Order> order = orderRepository.findById(orderId);
     OrderValidator.checkExist(order);
-    OrderResponseDto orderResponseDto = orderMapper.mapToResponse(order.get());
+    OrderResponseDto orderResponseDto = orderMapper.toResponse(order.get());
     return orderResponseDto;
   }
 

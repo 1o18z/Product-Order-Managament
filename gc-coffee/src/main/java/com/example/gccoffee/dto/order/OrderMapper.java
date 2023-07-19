@@ -8,7 +8,7 @@ import java.util.UUID;
 @Component
 public class OrderMapper {
 
-  public OrderResponseDto mapToResponse(Order order) {
+  public OrderResponseDto toResponse(Order order) {
     return new OrderResponseDto(
             order.getOrderId(),
             order.getEmail(),
