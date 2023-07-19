@@ -3,6 +3,10 @@ package com.example.gccoffee.repository;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Order;
 import com.example.gccoffee.model.Product;
+import com.example.gccoffee.query.DeleteQuery;
+import com.example.gccoffee.query.InsertQuery;
+import com.example.gccoffee.query.SelectQuery;
+import com.example.gccoffee.query.UpdateQuery;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,6 +18,10 @@ import java.util.*;
 public class OrderJdbcRepository implements OrderRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final InsertQuery insertQuery = new InsertQuery();
+  private final UpdateQuery updateQuery = new UpdateQuery();
+  private final DeleteQuery deleteQuery = new DeleteQuery();
+  private final SelectQuery selectQuery = new SelectQuery();
 
   public OrderJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
@@ -30,14 +38,21 @@ public class OrderJdbcRepository implements OrderRepository {
             .addValue("orderStatus", order.getOrderStatus())
             .addValue("createdAt", order.getCreatedAt()
             );
-    jdbcTemplate.update("INSERT INTO orders(order_id, email, address, product, quantity, orderStatus, created_at) " +
-            "VALUES(:orderId, :email, :address, :product, :quantity, :orderStatus, :createdAt)", sqlParameterSource);
+    jdbcTemplate.update(insertQuery
+                    .insert("orders(order_id, email, address, product, quantity, orderStatus, created_at)")
+                    .values(":orderId, :email, :address, :product, :quantity, :orderStatus, :createdAt")
+                    .getResult(),
+            sqlParameterSource);
     return order;
   }
 
   @Override
   public List<Order> findAll() {
-    List<Order> orders = jdbcTemplate.query("SELECT * FROM orders", orderRowMapper);
+    List<Order> orders = jdbcTemplate.query(selectQuery
+                    .select("*")
+                    .from("orders")
+                    .getResult(),
+            orderRowMapper);
     return orders;
   }
 
@@ -45,7 +60,11 @@ public class OrderJdbcRepository implements OrderRepository {
   public Optional<Order> findById(UUID orderId) {
     try {
       return Optional.ofNullable(
-              jdbcTemplate.queryForObject("SELECT * FROM orders WHERE order_id = :orderId",
+              jdbcTemplate.queryForObject(selectQuery
+                              .select("*")
+                              .from("orders")
+                              .where("order_id = :orderId")
+                              .getResult(),
                       Map.of("orderId", orderId), orderRowMapper)
       );
     } catch (EmptyStackException e) {
@@ -55,7 +74,11 @@ public class OrderJdbcRepository implements OrderRepository {
 
   @Override
   public void cancel(UUID orderId) {
-    jdbcTemplate.update("DELETE * from orders WHERE order_id = :orderId", Collections.emptyMap());
+    jdbcTemplate.update(deleteQuery
+                    .delete("orders")
+                    .where("order_id = :orderId")
+                    .getResult(),
+            Collections.emptyMap());
   }
 
   private RowMapper<Product> productRowMapper = (resultSet, rowNum) ->
