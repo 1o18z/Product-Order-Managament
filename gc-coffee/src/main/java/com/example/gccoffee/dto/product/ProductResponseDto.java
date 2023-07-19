@@ -4,6 +4,6 @@ import com.example.gccoffee.model.Category;
 
 import java.util.UUID;
 
-public record ProductResponseDto(UUID productId, String productName, Category category, long price,
+public record ProductResponseDto(UUID productId, String productName, Category category, int price,
                                  String description) {
 }

@@ -7,11 +7,11 @@ public class Product {
   private final UUID productId;
   private String name;
   private Category category;
-  private long price;
+  private int price;
   private String description;
   private final LocalDateTime createdAt;
 
-  public Product(UUID productId, String name, Category category, long price, String description) {
+  public Product(UUID productId, String name, Category category, int price, String description) {
     this.productId = productId;
     this.name = name;
     this.category = category;
@@ -32,7 +32,7 @@ public class Product {
     return category;
   }
 
-  public long getPrice() {
+  public int getPrice() {
     return price;
   }
 
