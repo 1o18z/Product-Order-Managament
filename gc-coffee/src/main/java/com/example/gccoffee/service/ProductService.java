@@ -27,12 +27,14 @@ public class ProductService {
     this.productRepository = productRepository;
   }
 
+  @Transactional
   public ProductResponseDto create(ProductCreateDto productCreateDto) {
     Product createdProduct = productMapper.toProduct(productCreateDto);
     Product savedProduct = productRepository.insert(createdProduct);
     return productMapper.mapToResponse(savedProduct);
   }
 
+  @Transactional
   public ProductResponseDto update(ProductUpdateDto productUpdateDto) {
     ProductValidator.checkExist(productRepository.findById(productUpdateDto.productId()));
     Product updatedProduct = productRepository.update(productUpdateDto);
@@ -67,10 +69,12 @@ public class ProductService {
             .toList();
   }
 
+  @Transactional
   public void deleteAll() {
     productRepository.deleteAll();
   }
 
+  @Transactional
   public void deleteById(UUID productId) {
     productRepository.deleteById(productId);
   }

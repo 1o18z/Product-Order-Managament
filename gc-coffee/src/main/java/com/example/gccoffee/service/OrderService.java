@@ -7,11 +7,13 @@ import com.example.gccoffee.model.Order;
 import com.example.gccoffee.repository.OrderRepository;
 import com.example.gccoffee.validator.OrderValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional(readOnly = true)
 @Service
 public class OrderService {
 
@@ -23,6 +25,7 @@ public class OrderService {
     this.orderRepository = orderRepository;
   }
 
+  @Transactional
   public OrderResponseDto create(OrderCreateDto orderCreateDto) {
     Order createdOrder = orderMapper.toOrder(orderCreateDto);
     Order savedOrder = orderRepository.insert(createdOrder);
@@ -43,6 +46,7 @@ public class OrderService {
     return orderResponseDto;
   }
 
+  @Transactional
   public void cancel(UUID orderId) {
     orderRepository.cancel(orderId);
   }
