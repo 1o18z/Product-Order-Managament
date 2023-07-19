@@ -3,6 +3,7 @@ package com.example.gccoffee.repository;
 import com.example.gccoffee.dto.product.ProductUpdateDto;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
+import com.example.gccoffee.query.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,6 +18,10 @@ import java.util.List;
 public class ProductJdbcRepository implements ProductRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
+  private final InsertQuery insertQuery = new InsertQuery();
+  private final UpdateQuery updateQuery = new UpdateQuery();
+  private final DeleteQuery deleteQuery = new DeleteQuery();
+  private final SelectQuery selectQuery = new SelectQuery();
 
   public ProductJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
@@ -24,7 +29,11 @@ public class ProductJdbcRepository implements ProductRepository {
 
   @Override
   public List<Product> findAll() {
-    return jdbcTemplate.query("SELECT * FROM products", productRowMapper);
+    return jdbcTemplate.query(selectQuery
+                    .select("*")
+                    .from("products")
+                    .getResult(),
+            productRowMapper);
   }
 
   @Override
@@ -37,8 +46,11 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("description", product.getDescription())
             .addValue("createdAt", product.getCreatedAt()
             );
-    int insertedProduct = jdbcTemplate.update("INSERT INTO products(product_id, product_name, category, price, description, created_at) " +
-            "VALUES(:productId, :productName, :category, :price, :description, :createdAt)", sqlParameterSource);
+    int insertedProduct = jdbcTemplate.update(insertQuery
+                    .insert("products(product_id, product_name, category, price, description, created_at) ")
+                    .values(":productId, :productName, :category, :price, :description, :createdAt")
+                    .getResult(),
+            sqlParameterSource);
     if (insertedProduct != 1) {
       throw new RuntimeException("Nothing was inserted");
     }
@@ -54,7 +66,12 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("price", productUpdateDto.price())
             .addValue("description", productUpdateDto.description()
             );
-    int updatedProduct = jdbcTemplate.update("UPDATE products SET product_name = :productName, category = :category, price = :price, description = :description WHERE product_id = :productId", sqlParameterSource
+    int updatedProduct = jdbcTemplate.update(updateQuery
+                    .update("products")
+                    .set("product_name = :productName, category = :category, price = :price, description = :description")
+                    .where("product_id = :productId")
+                    .getResult(),
+            sqlParameterSource
     );
     if (updatedProduct != 1) {
       throw new RuntimeException("Nothing was updated");
@@ -66,7 +83,11 @@ public class ProductJdbcRepository implements ProductRepository {
   public Optional<Product> findById(UUID productId) {
     try {
       return Optional.ofNullable(
-              jdbcTemplate.queryForObject("SELECT * FROM products WHERE product_id = :productId",
+              jdbcTemplate.queryForObject(selectQuery
+                              .select("*")
+                              .from("products")
+                              .where("product_id = :productId")
+                              .getResult(),
                       Collections.singletonMap("productId", productId.toString()), productRowMapper)
       );
     } catch (EmptyResultDataAccessException e) {
@@ -78,7 +99,11 @@ public class ProductJdbcRepository implements ProductRepository {
   public Optional<Product> findByName(String productName) {
     try {
       return Optional.ofNullable(
-              jdbcTemplate.queryForObject("SELECT * FROM products WHERE product_name = :productName",
+              jdbcTemplate.queryForObject(selectQuery
+                              .select("*")
+                              .from("products")
+                              .where("product_name = :productName")
+                              .getResult(),
                       Collections.singletonMap("productName", productName), productRowMapper)
       );
     } catch (EmptyResultDataAccessException e) {
@@ -88,7 +113,11 @@ public class ProductJdbcRepository implements ProductRepository {
 
   @Override
   public List<Product> findByCategory(Category category) {
-    return jdbcTemplate.query("SELECT * FROM products WHERE category = :category",
+    return jdbcTemplate.query(selectQuery
+                    .select("*")
+                    .from("products")
+                    .where("category = :category")
+                    .getResult(),
             Collections.singletonMap("category", category.toString()),
             productRowMapper
     );
@@ -96,12 +125,19 @@ public class ProductJdbcRepository implements ProductRepository {
 
   @Override
   public void deleteAll() {
-    jdbcTemplate.update("DELETE from products", Collections.emptyMap());
+    jdbcTemplate.update(deleteQuery
+                    .delete("products")
+                    .getResult(),
+            Collections.emptyMap());
   }
 
   @Override
   public void deleteById(UUID productId) {
-    jdbcTemplate.update("DELETE from products WHERE product_id = :productId", Collections.emptyMap());
+    jdbcTemplate.update(deleteQuery
+                    .delete("products")
+                    .where("product_id = :productId")
+                    .getResult(),
+            Collections.emptyMap());
   }
 
   private final RowMapper<Product> productRowMapper = (resultSet, rowNum) -> {
