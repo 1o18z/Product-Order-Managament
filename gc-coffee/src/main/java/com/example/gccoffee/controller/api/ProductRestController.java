@@ -45,20 +45,20 @@ public class ProductRestController {
     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
   }
 
-  @GetMapping("/{productId}")
+  @GetMapping("/list/{productId}")
   public ResponseEntity<ProductResponseDto> findById(@PathVariable UUID productId) {
     ProductResponseDto responseDto = productService.findById(productId);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @GetMapping("/{productId}")
-  public ResponseEntity<ProductResponseDto> findByName(@RequestParam(value = "productId") String name) {
-    ProductResponseDto responseDto = productService.findByName(name);
+  @GetMapping("/list/{productName}")
+  public ResponseEntity<ProductResponseDto> findByName(@PathVariable String productName) {
+    ProductResponseDto responseDto = productService.findByName(productName);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @GetMapping("/list")
-  public List<ProductResponseDto> findByCategory(Category category) {
+  @GetMapping("/list/{category}")
+  public List<ProductResponseDto> findByCategory(@PathVariable Category category) {
     return productService.findByCategory(category);
   }
 
