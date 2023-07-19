@@ -10,6 +10,7 @@ public class InsertQuery {
   private final StringBuilder stringBuilder = new StringBuilder();
 
   public InsertQuery insert(String sql) {
+    stringBuilder.setLength(0);
     stringBuilder
             .append(INSERT)
             .append(sql);

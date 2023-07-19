@@ -11,6 +11,7 @@ public class SelectQuery {
   private final StringBuilder stringBuilder = new StringBuilder();
 
   public SelectQuery select(String sql) {
+    stringBuilder.setLength(0);
     stringBuilder
             .append(SELECT)
             .append(sql);
