@@ -23,7 +23,8 @@ class ProductJdbcRepositoryTest {
   private final Product firstProduct = new Product(UUID.randomUUID(), "아메리카노", Category.COFFEE, 5000, "아메리카농농농");
   private final Product secondProduct = new Product(UUID.randomUUID(), "티라미수", Category.COFFEE_DESSERT, 7000, "티라미숭숭숭");
   private final Product thridProduct = new Product(UUID.randomUUID(), "라떼", Category.COFFEE, 5500, "라뗑뗑뗑");
-  private static final int TEST_RESULT_SIZE = 2;
+
+  private static final int FIND_TEST_RESULT_SIZE = 2;
   private static final int DELETE_TEST_RESULT_SIZE = 0;
 
 
@@ -40,7 +41,7 @@ class ProductJdbcRepositoryTest {
 
     List<Product> products = productJdbcRepository.findAll();
 
-    Assertions.assertEquals(products.size(), TEST_RESULT_SIZE);
+    Assertions.assertEquals(products.size(), FIND_TEST_RESULT_SIZE);
   }
 
   @Test
@@ -65,7 +66,7 @@ class ProductJdbcRepositoryTest {
     ProductValidator.checkExist(findProduct);
     Product product = findProduct.get();
 
-    Assertions.assertEquals(product.getName(), firstProduct.getName());
+    Assertions.assertEquals(product.getProductName(), firstProduct.getProductName());
   }
 
   @Test
@@ -78,7 +79,7 @@ class ProductJdbcRepositoryTest {
 
     List<Product> findCategory = productJdbcRepository.findByCategory(category);
 
-    Assertions.assertEquals(findCategory.size(), TEST_RESULT_SIZE);
+    Assertions.assertEquals(findCategory.size(), FIND_TEST_RESULT_SIZE);
     Assertions.assertEquals(category, findCategory.get(0).getCategory());
     Assertions.assertEquals(category, findCategory.get(1).getCategory());
   }
@@ -91,17 +92,17 @@ class ProductJdbcRepositoryTest {
     ProductUpdateDto updateDto = new ProductUpdateDto(firstProduct.getProductId(), "커피콩빵", Category.COFFEE_DESSERT, 3500, "빵빵빵");
     Product product = productJdbcRepository.update(updateDto);
 
-    Assertions.assertNotEquals(firstProduct.getName(), product.getName());
+    Assertions.assertNotEquals(firstProduct.getProductName(), product.getProductName());
     Assertions.assertNotEquals(firstProduct.getCategory(), product.getCategory());
   }
 
   @Test
-  @DisplayName("상품을 전체 삭제한다.")
-  void testDeleteAll() {
+  @DisplayName("상품을 전체 삭제할 수 있다.")
+  void deleteAll_Success() {
     productJdbcRepository.insert(firstProduct);
     productJdbcRepository.insert(secondProduct);
     int beforeSize = productJdbcRepository.findAll().size();
-    Assertions.assertEquals(beforeSize, TEST_RESULT_SIZE);
+    Assertions.assertEquals(beforeSize, FIND_TEST_RESULT_SIZE);
 
     productJdbcRepository.deleteAll();
     int afterSize = productJdbcRepository.findAll().size();

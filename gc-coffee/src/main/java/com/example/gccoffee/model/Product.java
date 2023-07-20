@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Product {
   private final UUID productId;
-  private String name;
+  private String productName;
   private Category category;
   private int price;
   private String description;
@@ -13,7 +13,7 @@ public class Product {
 
   public Product(UUID productId, String name, Category category, int price, String description) {
     this.productId = productId;
-    this.name = name;
+    this.productName = name;
     this.category = category;
     this.price = price;
     this.description = description;
@@ -24,8 +24,8 @@ public class Product {
     return productId;
   }
 
-  public String getName() {
-    return name;
+  public String getProductName() {
+    return productName;
   }
 
   public Category getCategory() {

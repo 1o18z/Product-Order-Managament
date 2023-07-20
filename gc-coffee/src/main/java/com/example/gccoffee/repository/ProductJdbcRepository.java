@@ -4,12 +4,14 @@ import com.example.gccoffee.dto.product.ProductUpdateDto;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 import com.example.gccoffee.query.*;
+import com.example.gccoffee.validator.ProductValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+
+import org.springframework.jdbc.core.RowMapper;
 
 import java.util.*;
 import java.util.List;
@@ -40,7 +42,7 @@ public class ProductJdbcRepository implements ProductRepository {
   public Product insert(Product product) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
             .addValue("productId", product.getProductId())
-            .addValue("productName", product.getName())
+            .addValue("productName", product.getProductName())
             .addValue("category", product.getCategory().toString())
             .addValue("price", product.getPrice())
             .addValue("description", product.getDescription())

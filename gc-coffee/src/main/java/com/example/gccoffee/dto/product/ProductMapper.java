@@ -11,7 +11,7 @@ public class ProductMapper {
   public ProductResponseDto mapToResponse(Product product) {
     return new ProductResponseDto(
             product.getProductId(),
-            product.getName(),
+            product.getProductName(),
             product.getCategory(),
             product.getPrice(),
             product.getDescription()
