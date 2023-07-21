@@ -21,14 +21,20 @@ public class ProductService {
 
   private final ProductMapper productMapper;
   private final ProductRepository productRepository;
+  private final ProductValidator productValidator;
 
-  public ProductService(ProductMapper productMapper, ProductRepository productRepository) {
+  public ProductService(ProductMapper productMapper, ProductRepository productRepository, ProductValidator productValidator) {
     this.productMapper = productMapper;
     this.productRepository = productRepository;
+    this.productValidator = productValidator;
   }
 
   @Transactional
   public ProductResponseDto create(ProductCreateDto productCreateDto) {
+    productValidator.validName(productCreateDto.productName());
+    productValidator.validDescription(productCreateDto.description());
+    productValidator.validPrice(productCreateDto.price());
+
     Product createdProduct = productMapper.toProduct(productCreateDto);
     Product savedProduct = productRepository.insert(createdProduct);
     return productMapper.mapToResponse(savedProduct);
@@ -36,7 +42,13 @@ public class ProductService {
 
   @Transactional
   public ProductResponseDto update(ProductUpdateDto productUpdateDto) {
-    ProductValidator.checkExist(productRepository.findById(productUpdateDto.productId()));
+    Optional<Product> product = productRepository.findById(productUpdateDto.productId());
+    productValidator.validProduct(product);
+
+    productValidator.validName(productUpdateDto.productName());
+    productValidator.validDescription(productUpdateDto.description());
+    productValidator.validPrice(productUpdateDto.price());
+
     Product updatedProduct = productRepository.update(productUpdateDto);
     return productMapper.mapToResponse(updatedProduct);
   }
@@ -50,14 +62,14 @@ public class ProductService {
 
   public ProductResponseDto findById(UUID productId) {
     Optional<Product> product = productRepository.findById(productId);
-    ProductValidator.checkExist(product);
+    productValidator.validProduct(product);
     ProductResponseDto productResponseDto = productMapper.mapToResponse(product.get());
     return productResponseDto;
   }
 
   public ProductResponseDto findByName(String productName) {
     Optional<Product> product = productRepository.findByName(productName);
-    ProductValidator.checkExist(product);
+    productValidator.validProduct(product);
     ProductResponseDto productResponseDto = productMapper.mapToResponse(product.get());
     return productResponseDto;
   }

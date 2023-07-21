@@ -1,5 +1,7 @@
 package com.example.gccoffee.model;
 
+import com.example.gccoffee.validator.ProductValidator;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ public class Product {
   private final LocalDateTime createdAt;
 
   public Product(UUID productId, String name, Category category, int price, String description) {
+    ProductValidator.validId(productId);
     this.productId = productId;
     this.productName = name;
     this.category = category;
