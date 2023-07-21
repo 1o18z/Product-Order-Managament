@@ -1,6 +1,8 @@
 package com.example.gccoffee.dto.order;
 
-import com.example.gccoffee.model.Product;
+import com.example.gccoffee.dto.orderItem.OrderItemCreateDto;
 
-public record OrderCreateDto (String email, String address, Product product, int quantity) {
+import java.util.List;
+
+public record OrderCreateDto(String email, String address, List<OrderItemCreateDto> orderItems) {
 }

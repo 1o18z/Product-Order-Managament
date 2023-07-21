@@ -13,9 +13,7 @@ public class OrderMapper {
     return new OrderResponseDto(
             order.getOrderId(),
             order.getEmail(),
-            order.getAddress(),
-            order.getProduct(),
-            order.getQuantity()
+            order.getAddress()
     );
   }
 
@@ -24,9 +22,7 @@ public class OrderMapper {
             UUID.randomUUID(),
             orderCreateDto.email(),
             orderCreateDto.address(),
-            orderCreateDto.product(),
-            OrderStatus.ORDER_SUCCESS,
-            orderCreateDto.quantity()
+            OrderStatus.ORDER_SUCCESS
     );
   }
 
