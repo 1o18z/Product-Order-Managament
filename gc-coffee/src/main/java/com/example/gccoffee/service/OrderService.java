@@ -19,14 +19,19 @@ public class OrderService {
 
   private final OrderMapper orderMapper;
   private final OrderRepository orderRepository;
+  private final OrderValidator orderValidator;
 
-  public OrderService(OrderMapper orderMapper, OrderRepository orderRepository) {
+  public OrderService(OrderMapper orderMapper, OrderRepository orderRepository, OrderValidator orderValidator) {
     this.orderMapper = orderMapper;
     this.orderRepository = orderRepository;
+    this.orderValidator = orderValidator;
   }
 
   @Transactional
   public OrderResponseDto create(OrderCreateDto orderCreateDto) {
+    orderValidator.validEmail(orderCreateDto.email());
+    orderValidator.validQuantity(orderCreateDto.quantity());
+
     Order createdOrder = orderMapper.toOrder(orderCreateDto);
     Order savedOrder = orderRepository.insert(createdOrder);
     return orderMapper.toResponse(savedOrder);
@@ -41,13 +46,15 @@ public class OrderService {
 
   public OrderResponseDto findById(UUID orderId) {
     Optional<Order> order = orderRepository.findById(orderId);
-    OrderValidator.checkExist(order);
+    orderValidator.validOrder(order);
     OrderResponseDto orderResponseDto = orderMapper.toResponse(order.get());
     return orderResponseDto;
   }
 
   @Transactional
   public void cancel(UUID orderId) {
+    Optional<Order> order = orderRepository.findById(orderId);
+    orderValidator.validOrder(order);
     orderRepository.cancel(orderId);
   }
 

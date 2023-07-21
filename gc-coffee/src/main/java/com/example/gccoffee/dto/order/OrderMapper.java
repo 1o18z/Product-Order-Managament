@@ -1,6 +1,7 @@
 package com.example.gccoffee.dto.order;
 
 import com.example.gccoffee.model.Order;
+import com.example.gccoffee.model.OrderStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class OrderMapper {
             orderCreateDto.email(),
             orderCreateDto.address(),
             orderCreateDto.product(),
+            OrderStatus.ORDER_SUCCESS,
             orderCreateDto.quantity()
     );
   }

@@ -1,5 +1,7 @@
 package com.example.gccoffee.model;
 
+import com.example.gccoffee.validator.OrderValidator;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,13 +14,14 @@ public class Order {
   private OrderStatus orderStatus;
   private final LocalDateTime createdAt;
 
-  public Order(UUID orderId, String email, String address, Product product, int quantity) {
+  public Order(UUID orderId, String email, String address, Product product, OrderStatus orderStatus, int quantity) {
+    OrderValidator.validId(orderId);
     this.orderId = orderId;
     this.email = email;
     this.address = address;
     this.product = product;
     this.quantity = quantity;
-    this.orderStatus = OrderStatus.ORDER_SUCCESS;
+    this.orderStatus = orderStatus;
     this.createdAt = LocalDateTime.now();
   }
 
