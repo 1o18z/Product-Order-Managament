@@ -1,9 +1,9 @@
 package com.example.gccoffee.service;
 
-import com.example.gccoffee.dto.order.OrderCreateDto;
+import com.example.gccoffee.dto.order.OrderCreateRequest;
 import com.example.gccoffee.dto.order.OrderMapper;
-import com.example.gccoffee.dto.order.OrderResponseDto;
-import com.example.gccoffee.dto.orderItem.OrderItemCreateDto;
+import com.example.gccoffee.dto.order.OrderResponse;
+import com.example.gccoffee.dto.orderItem.OrderItemCreateRequest;
 import com.example.gccoffee.dto.orderItem.OrderItemMapper;
 import com.example.gccoffee.model.Order;
 import com.example.gccoffee.model.OrderItem;
@@ -37,16 +37,16 @@ public class OrderService {
   }
 
   @Transactional
-  public OrderResponseDto create(OrderCreateDto orderCreateDto) {
+  public OrderResponse create(OrderCreateRequest orderCreateDto) {
     orderValidator.validEmail(orderCreateDto.email());
 
     Order createdOrder = orderMapper.toOrder(orderCreateDto);
     Order savedOrder = orderRepository.save(createdOrder);
 
-    List<OrderItemCreateDto> orderItems = orderCreateDto.orderItems();
+    List<OrderItemCreateRequest> orderItems = orderCreateDto.orderItems();
     List<OrderItem> orderItemList = new ArrayList<>();
 
-    for (OrderItemCreateDto item : orderItems) {
+    for (OrderItemCreateRequest item : orderItems) {
       OrderItem orderItem = orderItemMapper.toOrderItem(item, savedOrder.getOrderId());
       orderItemList.add(orderItem);
     }
@@ -55,17 +55,17 @@ public class OrderService {
     return orderMapper.toResponse(savedOrder);
   }
 
-  public List<OrderResponseDto> findAll() {
+  public List<OrderResponse> findAll() {
     return orderRepository.findAll()
             .stream()
             .map(orderMapper::toResponse)
             .toList();
   }
 
-  public OrderResponseDto findById(UUID orderId) {
+  public OrderResponse findById(UUID orderId) {
     Optional<Order> order = orderRepository.findById(orderId);
     orderValidator.validOrder(order);
-    OrderResponseDto orderResponseDto = orderMapper.toResponse(order.get());
+    OrderResponse orderResponseDto = orderMapper.toResponse(order.get());
     return orderResponseDto;
   }
 

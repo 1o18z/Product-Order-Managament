@@ -9,15 +9,15 @@ import java.util.UUID;
 @Component
 public class OrderMapper {
 
-  public OrderResponseDto toResponse(Order order) {
-    return new OrderResponseDto(
+  public OrderResponse toResponse(Order order) {
+    return new OrderResponse(
             order.getOrderId(),
             order.getEmail(),
             order.getAddress()
     );
   }
 
-  public Order toOrder(OrderCreateDto orderCreateDto) {
+  public Order toOrder(OrderCreateRequest orderCreateDto) {
     return new Order(
             UUID.randomUUID(),
             orderCreateDto.email(),

@@ -8,7 +8,7 @@ import java.util.UUID;
 @Component
 public class OrderItemMapper {
 
-  public OrderItem toOrderItem(OrderItemCreateDto createDto, UUID orderId) {
+  public OrderItem toOrderItem(OrderItemCreateRequest createDto, UUID orderId) {
     return new OrderItem(
             UUID.randomUUID(),
             orderId,

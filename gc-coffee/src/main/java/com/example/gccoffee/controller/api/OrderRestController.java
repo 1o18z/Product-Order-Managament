@@ -1,7 +1,7 @@
 package com.example.gccoffee.controller.api;
 
-import com.example.gccoffee.dto.order.OrderCreateDto;
-import com.example.gccoffee.dto.order.OrderResponseDto;
+import com.example.gccoffee.dto.order.OrderCreateRequest;
+import com.example.gccoffee.dto.order.OrderResponse;
 import com.example.gccoffee.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +23,18 @@ public class OrderRestController {
   @PostMapping
   public ResponseEntity<OrderResponse> create(@RequestBody OrderCreateRequest orderCreateDto) {
     OrderResponse responseDto = orderService.create(orderCreateDto);
-  public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderCreateDto orderCreateDto) {
-    OrderResponseDto responseDto = orderService.create(orderCreateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
   @GetMapping
-  public ResponseEntity<List<OrderResponseDto>> findAll() {
-    List<OrderResponseDto> responseDtoList = orderService.findAll();
+  public ResponseEntity<List<OrderResponse>> findAll() {
+    List<OrderResponse> responseDtoList = orderService.findAll();
     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
   }
 
   @GetMapping("/{orderId}")
-  public ResponseEntity<OrderResponseDto> findById(@PathVariable UUID orderId) {
-    OrderResponseDto responseDto = orderService.findById(orderId);
+  public ResponseEntity<OrderResponse> findById(@PathVariable UUID orderId) {
+    OrderResponse responseDto = orderService.findById(orderId);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 

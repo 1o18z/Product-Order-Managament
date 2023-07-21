@@ -28,8 +28,8 @@ public class ProductRestController {
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
-  @PatchMapping
-  public ResponseEntity<ProductResponse> update(@RequestBody ProductUpdateRequest productUpdateDto) {
+  @PatchMapping("/{productId}")
+  public ResponseEntity<ProductResponse> update(@PathVariable UUID productId, @RequestBody ProductUpdateRequest productUpdateDto) {
     ProductResponse responseDto = productService.update(productUpdateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }

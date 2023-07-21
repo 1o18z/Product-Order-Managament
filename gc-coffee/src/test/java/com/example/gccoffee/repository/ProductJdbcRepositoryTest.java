@@ -1,6 +1,6 @@
 package com.example.gccoffee.repository;
 
-import com.example.gccoffee.dto.product.ProductUpdateDto;
+import com.example.gccoffee.dto.product.ProductUpdateRequest;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +25,6 @@ class ProductJdbcRepositoryTest {
 
   private static final int FIND_TEST_RESULT_SIZE = 2;
   private static final int DELETE_TEST_RESULT_SIZE = 0;
-
 
 
   @Test
@@ -82,7 +81,7 @@ class ProductJdbcRepositoryTest {
   void updateProduct_Success() {
     productJdbcRepository.insert(firstProduct);
 
-    ProductUpdateDto updateDto = new ProductUpdateDto(firstProduct.getProductId(), "Test4", Category.COFFEE_DESSERT, 3500);
+    ProductUpdateRequest updateDto = new ProductUpdateRequest(firstProduct.getProductId(), "Test4", Category.COFFEE_DESSERT, 3500);
     Product product = productJdbcRepository.update(updateDto);
 
     Assertions.assertNotEquals(firstProduct.getProductName(), product.getProductName());
