@@ -1,15 +1,15 @@
 package com.example.gccoffee.repository;
 
-import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Order;
-import com.example.gccoffee.model.Product;
+import com.example.gccoffee.model.OrderStatus;
 import com.example.gccoffee.query.DeleteQuery;
 import com.example.gccoffee.query.InsertQuery;
 import com.example.gccoffee.query.SelectQuery;
-import com.example.gccoffee.query.UpdateQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -19,7 +19,6 @@ public class OrderJdbcRepository implements OrderRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final InsertQuery insertQuery = new InsertQuery();
-  private final UpdateQuery updateQuery = new UpdateQuery();
   private final DeleteQuery deleteQuery = new DeleteQuery();
   private final SelectQuery selectQuery = new SelectQuery();
 
@@ -29,18 +28,15 @@ public class OrderJdbcRepository implements OrderRepository {
 
   @Override
   public Order insert(Order order) {
-    MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-            .addValue("orderId", order.getOrderId())
+    SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+            .addValue("orderId", order.getOrderId().toString())
             .addValue("email", order.getEmail())
             .addValue("address", order.getAddress())
-            .addValue("product", order.getProduct())
-            .addValue("quantity", order.getQuantity())
-            .addValue("orderStatus", order.getOrderStatus())
-            .addValue("createdAt", order.getCreatedAt()
+            .addValue("orderStatus", order.getOrderStatus().name()
             );
     jdbcTemplate.update(insertQuery
-                    .insert("orders(order_id, email, address, product, quantity, orderStatus, created_at)")
-                    .values(":orderId, :email, :address, :product, :quantity, :orderStatus, :createdAt")
+                    .insert("orders(order_id, email, address, order_status)")
+                    .values(":orderId, :email, :address, :orderStatus")
                     .getResult(),
             sqlParameterSource);
     return order;
@@ -48,12 +44,11 @@ public class OrderJdbcRepository implements OrderRepository {
 
   @Override
   public List<Order> findAll() {
-    List<Order> orders = jdbcTemplate.query(selectQuery
+    return jdbcTemplate.query(selectQuery
                     .select("*")
                     .from("orders")
                     .getResult(),
             orderRowMapper);
-    return orders;
   }
 
   @Override
@@ -67,7 +62,7 @@ public class OrderJdbcRepository implements OrderRepository {
                               .getResult(),
                       Map.of("orderId", orderId), orderRowMapper)
       );
-    } catch (EmptyStackException e) {
+    } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
   }
@@ -81,23 +76,20 @@ public class OrderJdbcRepository implements OrderRepository {
             Collections.emptyMap());
   }
 
-  private RowMapper<Product> productRowMapper = (resultSet, rowNum) ->
-          new Product(
-                  UUID.fromString(resultSet.getString("productId")),
-                  resultSet.getString("name"),
-                  Category.valueOf(resultSet.getString("category")),
-                  resultSet.getInt("price"),
-                  resultSet.getString("description")
-          );
+  @Override
+  public void deleteAll() {
+    jdbcTemplate.update(deleteQuery
+                    .delete("orders")
+                    .getResult(),
+            Collections.emptyMap());
+  }
 
   private RowMapper<Order> orderRowMapper = (resultSet, rowNum) -> {
-    Product product = productRowMapper.mapRow(resultSet, rowNum);
     Order order = new Order(
-            UUID.fromString(resultSet.getString("orderId")),
+            UUID.fromString(resultSet.getString("order_id")),
             resultSet.getString("email"),
             resultSet.getString("address"),
-            product,
-            resultSet.getInt("quantity")
+            OrderStatus.valueOf(resultSet.getString("order_status"))
     );
     return order;
   };
