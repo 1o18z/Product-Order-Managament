@@ -1,11 +1,9 @@
 package com.example.gccoffee.model;
 
 import com.example.gccoffee.validator.ProductValidator;
-import lombok.Getter;
 
 import java.util.UUID;
 
-@Getter
 public class Product {
   private final UUID productId;
   private String productName;
@@ -18,6 +16,22 @@ public class Product {
     this.productName = name;
     this.category = category;
     this.price = price;
+  }
+
+  public UUID getProductId() {
+    return productId;
+  }
+
+  public String getProductName() {
+    return productName;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public int getPrice() {
+    return price;
   }
 
 }
