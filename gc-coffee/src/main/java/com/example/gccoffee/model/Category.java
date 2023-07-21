@@ -7,7 +7,7 @@ public enum Category {
   COFFEE_CUP("커피잔"),
   COFFEE_DESSERT("커피디저트"),
   COFFEE("커피"),
-  DEFAULT("없음"),
+  DEFAULT("존재하지 않는 카테고리"),
   ;
 
   private String type;
