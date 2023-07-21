@@ -40,7 +40,7 @@ public class ProductJdbcRepository implements ProductRepository {
   @Override
   public Product insert(Product product) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-            .addValue("productId", product.getProductId())
+            .addValue("productId", product.getProductId().toString())
             .addValue("productName", product.getProductName())
             .addValue("category", product.getCategory().toString())
             .addValue("price", product.getPrice()
@@ -59,7 +59,7 @@ public class ProductJdbcRepository implements ProductRepository {
   @Override
   public Product update(ProductUpdateDto productUpdateDto) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-            .addValue("productId", productUpdateDto.productId())
+            .addValue("productId", productUpdateDto.productId().toString())
             .addValue("productName", productUpdateDto.productName())
             .addValue("category", productUpdateDto.category().toString())
             .addValue("price", productUpdateDto.price()
@@ -86,7 +86,7 @@ public class ProductJdbcRepository implements ProductRepository {
                               .from("products")
                               .where("product_id = :productId")
                               .getResult(),
-                      Collections.singletonMap("productId", productId.toString()), productRowMapper)
+                      Collections.singletonMap("productId", productId), productRowMapper)
       );
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
@@ -131,11 +131,14 @@ public class ProductJdbcRepository implements ProductRepository {
 
   @Override
   public void deleteById(UUID productId) {
+    SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+            .addValue("productId", productId.toString());
+
     jdbcTemplate.update(deleteQuery
                     .delete("products")
                     .where("product_id = :productId")
                     .getResult(),
-            Collections.emptyMap());
+            sqlParameterSource);
   }
 
   private final RowMapper<Product> productRowMapper = (resultSet, rowNum) -> {
