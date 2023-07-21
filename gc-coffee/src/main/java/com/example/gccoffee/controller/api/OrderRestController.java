@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/api/orders")
 public class OrderRestController {
 
   private final OrderService orderService;
@@ -20,13 +20,13 @@ public class OrderRestController {
     this.orderService = orderService;
   }
 
-  @PostMapping("/create")
+  @PostMapping
   public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderCreateDto orderCreateDto) {
     OrderResponseDto responseDto = orderService.create(orderCreateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
-  @GetMapping("/list")
+  @GetMapping
   public ResponseEntity<List<OrderResponseDto>> findAll() {
     List<OrderResponseDto> responseDtoList = orderService.findAll();
     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
@@ -38,9 +38,16 @@ public class OrderRestController {
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @DeleteMapping("/{id}")
-  public void cancel(UUID orderId) {
+  @DeleteMapping("/{orderId}")
+  public ResponseEntity<Void> cancel(@PathVariable UUID orderId) {
     orderService.cancel(orderId);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @DeleteMapping
+  public ResponseEntity<Void> deleteAll() {
+    orderService.deleteAll();
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
 }

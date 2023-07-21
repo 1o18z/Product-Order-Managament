@@ -58,4 +58,9 @@ public class OrderService {
     orderRepository.cancel(orderId);
   }
 
+  @Transactional
+  public void deleteAll() {
+    orderRepository.deleteAll();
+  }
+
 }

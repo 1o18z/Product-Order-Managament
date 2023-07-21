@@ -16,4 +16,6 @@ public interface OrderRepository {
 
   void cancel(UUID orderId);
 
+  void deleteAll();
+
 }
