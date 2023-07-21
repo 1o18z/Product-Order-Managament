@@ -13,8 +13,7 @@ public class ProductMapper {
             product.getProductId(),
             product.getProductName(),
             product.getCategory(),
-            product.getPrice(),
-            product.getDescription()
+            product.getPrice()
     );
   }
 
@@ -23,8 +22,7 @@ public class ProductMapper {
             UUID.randomUUID(),
             productCreateDto.productName(),
             productCreateDto.category(),
-            productCreateDto.price(),
-            productCreateDto.description()
+            productCreateDto.price()
     );
   }
 

@@ -4,7 +4,6 @@ import com.example.gccoffee.dto.product.ProductUpdateDto;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 import com.example.gccoffee.query.*;
-import com.example.gccoffee.validator.ProductValidator;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -44,12 +43,11 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("productId", product.getProductId())
             .addValue("productName", product.getProductName())
             .addValue("category", product.getCategory().toString())
-            .addValue("price", product.getPrice())
-            .addValue("description", product.getDescription()
+            .addValue("price", product.getPrice()
             );
     int insertedProduct = jdbcTemplate.update(insertQuery
-                    .insert("products(product_id, product_name, category, price, description) ")
-                    .values(":productId, :productName, :category, :price, :description")
+                    .insert("products(product_id, product_name, category, price) ")
+                    .values(":productId, :productName, :category, :price")
                     .getResult(),
             sqlParameterSource);
     if (insertedProduct != 1) {
@@ -64,12 +62,11 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("productId", productUpdateDto.productId())
             .addValue("productName", productUpdateDto.productName())
             .addValue("category", productUpdateDto.category().toString())
-            .addValue("price", productUpdateDto.price())
-            .addValue("description", productUpdateDto.description()
+            .addValue("price", productUpdateDto.price()
             );
     int updatedProduct = jdbcTemplate.update(updateQuery
                     .update("products")
-                    .set("product_name = :productName, category = :category, price = :price, description = :description")
+                    .set("product_name = :productName, category = :category, price = :price")
                     .where("product_id = :productId")
                     .getResult(),
             sqlParameterSource
@@ -146,8 +143,7 @@ public class ProductJdbcRepository implements ProductRepository {
             UUID.fromString(resultSet.getString("product_id")),
             resultSet.getString("product_name"),
             Category.valueOf(resultSet.getString("category")),
-            resultSet.getInt("price"),
-            resultSet.getString("description")
+            resultSet.getInt("price")
     );
     return product;
   };

@@ -32,7 +32,6 @@ public class ProductService {
   @Transactional
   public ProductResponseDto create(ProductCreateDto productCreateDto) {
     productValidator.validName(productCreateDto.productName());
-    productValidator.validDescription(productCreateDto.description());
     productValidator.validPrice(productCreateDto.price());
 
     Product createdProduct = productMapper.toProduct(productCreateDto);
@@ -46,7 +45,6 @@ public class ProductService {
     productValidator.validProduct(product);
 
     productValidator.validName(productUpdateDto.productName());
-    productValidator.validDescription(productUpdateDto.description());
     productValidator.validPrice(productUpdateDto.price());
 
     Product updatedProduct = productRepository.update(productUpdateDto);

@@ -11,15 +11,13 @@ public class Product {
   private String productName;
   private Category category;
   private int price;
-  private String description;
 
-  public Product(UUID productId, String name, Category category, int price, String description) {
+  public Product(UUID productId, String name, Category category, int price) {
     ProductValidator.validId(productId);
     this.productId = productId;
     this.productName = name;
     this.category = category;
     this.price = price;
-    this.description = description;
   }
 
 }
