@@ -8,7 +8,7 @@ import java.util.UUID;
 @Component
 public class ProductMapper {
 
-  public ProductResponseDto mapToResponse(Product product) {
+  public ProductResponseDto toResponse(Product product) {
     return new ProductResponseDto(
             product.getProductId(),
             product.getProductName(),

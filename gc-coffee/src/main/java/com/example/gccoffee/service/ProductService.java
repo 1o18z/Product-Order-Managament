@@ -33,10 +33,11 @@ public class ProductService {
   public ProductResponseDto create(ProductCreateDto productCreateDto) {
     productValidator.validName(productCreateDto.productName());
     productValidator.validPrice(productCreateDto.price());
+    Category.findCategory(productCreateDto.category());
 
     Product createdProduct = productMapper.toProduct(productCreateDto);
     Product savedProduct = productRepository.insert(createdProduct);
-    return productMapper.mapToResponse(savedProduct);
+    return productMapper.toResponse(savedProduct);
   }
 
   @Transactional
@@ -48,34 +49,34 @@ public class ProductService {
     productValidator.validPrice(productUpdateDto.price());
 
     Product updatedProduct = productRepository.update(productUpdateDto);
-    return productMapper.mapToResponse(updatedProduct);
+    return productMapper.toResponse(updatedProduct);
   }
 
   public List<ProductResponseDto> findAll() {
     return productRepository.findAll()
             .stream()
-            .map(productMapper::mapToResponse)
+            .map(productMapper::toResponse)
             .toList();
   }
 
   public ProductResponseDto findById(UUID productId) {
     Optional<Product> product = productRepository.findById(productId);
     productValidator.validProduct(product);
-    ProductResponseDto productResponseDto = productMapper.mapToResponse(product.get());
+    ProductResponseDto productResponseDto = productMapper.toResponse(product.get());
     return productResponseDto;
   }
 
   public ProductResponseDto findByName(String productName) {
     Optional<Product> product = productRepository.findByName(productName);
     productValidator.validProduct(product);
-    ProductResponseDto productResponseDto = productMapper.mapToResponse(product.get());
+    ProductResponseDto productResponseDto = productMapper.toResponse(product.get());
     return productResponseDto;
   }
 
   public List<ProductResponseDto> findByCategory(Category category) {
     return productRepository.findByCategory(category)
             .stream()
-            .map(productMapper::mapToResponse)
+            .map(productMapper::toResponse)
             .toList();
   }
 
