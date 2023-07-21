@@ -28,12 +28,7 @@ public class ProductRestController {
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
-  @GetMapping("/{productId}/update")
-  public String updateForm(@PathVariable UUID productId) {
-    return "products/update-product";
-  }
-
-  @PutMapping("/{productId}")
+  @PatchMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> update(@PathVariable UUID productId, @RequestBody ProductUpdateDto productUpdateDto) {
     ProductResponseDto responseDto = productService.update(productUpdateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
