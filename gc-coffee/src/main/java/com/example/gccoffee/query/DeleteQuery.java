@@ -7,6 +7,7 @@ public class DeleteQuery {
   private final StringBuilder stringBuilder = new StringBuilder();
 
   public DeleteQuery delete(String table) {
+    stringBuilder.setLength(0);
     stringBuilder
             .append(DELETE)
             .append(table);

@@ -1,10 +1,9 @@
-package com.example.gccoffee.model;
+package com.example.gccoffee.repository;
 
 import com.example.gccoffee.dto.product.ProductUpdateDto;
-import com.example.gccoffee.repository.ProductJdbcRepository;
-import com.example.gccoffee.validator.ProductValidator;
+import com.example.gccoffee.model.Category;
+import com.example.gccoffee.model.Product;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +19,14 @@ class ProductJdbcRepositoryTest {
   @Autowired
   ProductJdbcRepository productJdbcRepository;
 
-  private final Product firstProduct = new Product(UUID.randomUUID(), "아메리카노", Category.COFFEE, 5000, "아메리카농농농");
-  private final Product secondProduct = new Product(UUID.randomUUID(), "티라미수", Category.COFFEE_DESSERT, 7000, "티라미숭숭숭");
-  private final Product thridProduct = new Product(UUID.randomUUID(), "라떼", Category.COFFEE, 5500, "라뗑뗑뗑");
+  private final Product firstProduct = new Product(UUID.randomUUID(), "Test1", Category.COFFEE, 5000);
+  private final Product secondProduct = new Product(UUID.randomUUID(), "Test2", Category.COFFEE_DESSERT, 7000);
+  private final Product thridProduct = new Product(UUID.randomUUID(), "Test3", Category.COFFEE, 5500);
 
   private static final int FIND_TEST_RESULT_SIZE = 2;
   private static final int DELETE_TEST_RESULT_SIZE = 0;
 
 
-  @BeforeEach
-  void delete() {
-    productJdbcRepository.deleteAll();
-  }
 
   @Test
   @DisplayName("상품을 추가할 수 있다.")
@@ -49,8 +44,7 @@ class ProductJdbcRepositoryTest {
   void findByName_Success() {
     productJdbcRepository.insert(secondProduct);
 
-    Optional<Product> findProduct = productJdbcRepository.findByName(secondProduct.getName());
-    ProductValidator.checkExist(findProduct);
+    Optional<Product> findProduct = productJdbcRepository.findByName(secondProduct.getProductName());
     Product product = findProduct.get();
 
     Assertions.assertEquals(product.getProductId(), secondProduct.getProductId());
@@ -63,7 +57,6 @@ class ProductJdbcRepositoryTest {
     productJdbcRepository.insert(secondProduct);
 
     Optional<Product> findProduct = productJdbcRepository.findById(firstProduct.getProductId());
-    ProductValidator.checkExist(findProduct);
     Product product = findProduct.get();
 
     Assertions.assertEquals(product.getProductName(), firstProduct.getProductName());
@@ -89,7 +82,7 @@ class ProductJdbcRepositoryTest {
   void updateProduct_Success() {
     productJdbcRepository.insert(firstProduct);
 
-    ProductUpdateDto updateDto = new ProductUpdateDto(firstProduct.getProductId(), "커피콩빵", Category.COFFEE_DESSERT, 3500, "빵빵빵");
+    ProductUpdateDto updateDto = new ProductUpdateDto(firstProduct.getProductId(), "Test4", Category.COFFEE_DESSERT, 3500);
     Product product = productJdbcRepository.update(updateDto);
 
     Assertions.assertNotEquals(firstProduct.getProductName(), product.getProductName());
@@ -109,6 +102,17 @@ class ProductJdbcRepositoryTest {
     Assertions.assertEquals(afterSize, DELETE_TEST_RESULT_SIZE);
 
     Assertions.assertNotEquals(beforeSize, afterSize);
+  }
+
+  @Test
+  @DisplayName("상품을 아이디로 삭제할 수 있다.")
+  void deleteById_Success() {
+    productJdbcRepository.insert(firstProduct);
+    productJdbcRepository.insert(secondProduct);
+
+    productJdbcRepository.deleteById(firstProduct.getProductId());
+
+    productJdbcRepository.findById(firstProduct.getProductId());
   }
 
 }
