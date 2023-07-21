@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/products")
 public class ProductRestController {
 
   private final ProductService productService;
@@ -22,7 +22,7 @@ public class ProductRestController {
     this.productService = productService;
   }
 
-  @PostMapping("/create")
+  @PostMapping
   public ResponseEntity<ProductResponseDto> create(@RequestBody ProductCreateDto createProductRequest) {
     ProductResponseDto responseDto = productService.create(createProductRequest);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
@@ -33,42 +33,42 @@ public class ProductRestController {
     return "products/update-product";
   }
 
-  @PutMapping("/{productId}/update")
-  public ResponseEntity<ProductResponseDto> update(@PathVariable UUID productId, ProductUpdateDto productUpdateDto) {
+  @PutMapping("/{productId}")
+  public ResponseEntity<ProductResponseDto> update(@PathVariable UUID productId, @RequestBody ProductUpdateDto productUpdateDto) {
     ProductResponseDto responseDto = productService.update(productUpdateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @GetMapping("/list")
+  @GetMapping
   public ResponseEntity<List<ProductResponseDto>> findAll() {
     List<ProductResponseDto> responseDtoList = productService.findAll();
     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
   }
 
-  @GetMapping("/list/{productId}")
+  @GetMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> findById(@PathVariable UUID productId) {
     ProductResponseDto responseDto = productService.findById(productId);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @GetMapping("/list/{productName}")
+  @GetMapping("/name/{productName}")
   public ResponseEntity<ProductResponseDto> findByName(@PathVariable String productName) {
     ProductResponseDto responseDto = productService.findByName(productName);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
-  @GetMapping("/list/{category}")
+  @GetMapping("/category/{category}")
   public List<ProductResponseDto> findByCategory(@PathVariable Category category) {
     return productService.findByCategory(category);
   }
 
-  @DeleteMapping("/list")
+  @DeleteMapping
   public void deleteAll() {
     productService.deleteAll();
   }
 
   @DeleteMapping("/{productId}")
-  public void deleteById(UUID productId) {
+  public void deleteById(@PathVariable UUID productId) {
     productService.deleteById(productId);
   }
 
