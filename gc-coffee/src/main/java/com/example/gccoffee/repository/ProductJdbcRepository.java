@@ -45,12 +45,11 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("productName", product.getProductName())
             .addValue("category", product.getCategory().toString())
             .addValue("price", product.getPrice())
-            .addValue("description", product.getDescription())
-            .addValue("createdAt", product.getCreatedAt()
+            .addValue("description", product.getDescription()
             );
     int insertedProduct = jdbcTemplate.update(insertQuery
-                    .insert("products(product_id, product_name, category, price, description, created_at) ")
-                    .values(":productId, :productName, :category, :price, :description, :createdAt")
+                    .insert("products(product_id, product_name, category, price, description) ")
+                    .values(":productId, :productName, :category, :price, :description")
                     .getResult(),
             sqlParameterSource);
     if (insertedProduct != 1) {
