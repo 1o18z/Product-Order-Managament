@@ -1,6 +1,6 @@
 package com.example.gccoffee.repository;
 
-import com.example.gccoffee.dto.product.ProductUpdateDto;
+import com.example.gccoffee.dto.product.ProductUpdateRequest;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 
@@ -12,7 +12,7 @@ public interface ProductRepository {
 
   Product insert(Product product);
 
-  Product update(ProductUpdateDto productUpdateDto);
+  Product update(ProductUpdateRequest productUpdateDto);
 
   Optional<Product> findById(UUID productId);
 

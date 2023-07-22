@@ -1,7 +1,5 @@
 package com.example.gccoffee.model;
 
-import com.example.gccoffee.validator.ProductValidator;
-
 import java.util.UUID;
 
 public class Product {
@@ -10,10 +8,9 @@ public class Product {
   private Category category;
   private int price;
 
-  public Product(UUID productId, String name, Category category, int price) {
-    ProductValidator.validId(productId);
+  public Product(UUID productId, String productName, Category category, int price) {
     this.productId = productId;
-    this.productName = name;
+    this.productName = productName;
     this.category = category;
     this.price = price;
   }

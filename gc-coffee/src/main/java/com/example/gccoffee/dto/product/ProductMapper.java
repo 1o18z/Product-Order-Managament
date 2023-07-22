@@ -8,8 +8,8 @@ import java.util.UUID;
 @Component
 public class ProductMapper {
 
-  public ProductResponseDto toResponse(Product product) {
-    return new ProductResponseDto(
+  public ProductResponse toResponse(Product product) {
+    return new ProductResponse(
             product.getProductId(),
             product.getProductName(),
             product.getCategory(),
@@ -17,7 +17,7 @@ public class ProductMapper {
     );
   }
 
-  public Product toProduct(ProductCreateDto productCreateDto) {
+  public Product toProduct(ProductCreateRequest productCreateDto) {
     return new Product(
             UUID.randomUUID(),
             productCreateDto.productName(),

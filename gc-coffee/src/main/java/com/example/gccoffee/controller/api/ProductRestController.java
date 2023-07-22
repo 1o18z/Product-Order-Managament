@@ -1,8 +1,8 @@
 package com.example.gccoffee.controller.api;
 
-import com.example.gccoffee.dto.product.ProductCreateDto;
-import com.example.gccoffee.dto.product.ProductResponseDto;
-import com.example.gccoffee.dto.product.ProductUpdateDto;
+import com.example.gccoffee.dto.product.ProductCreateRequest;
+import com.example.gccoffee.dto.product.ProductResponse;
+import com.example.gccoffee.dto.product.ProductUpdateRequest;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -23,37 +23,37 @@ public class ProductRestController {
   }
 
   @PostMapping
-  public ResponseEntity<ProductResponseDto> create(@RequestBody ProductCreateDto createProductRequest) {
-    ProductResponseDto responseDto = productService.create(createProductRequest);
+  public ResponseEntity<ProductResponse> create(@RequestBody ProductCreateRequest createProductRequest) {
+    ProductResponse responseDto = productService.create(createProductRequest);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
-  @PatchMapping("/{productId}")
-  public ResponseEntity<ProductResponseDto> update(@PathVariable UUID productId, @RequestBody ProductUpdateDto productUpdateDto) {
-    ProductResponseDto responseDto = productService.update(productUpdateDto);
+  @PatchMapping
+  public ResponseEntity<ProductResponse> update(@RequestBody ProductUpdateRequest productUpdateDto) {
+    ProductResponse responseDto = productService.update(productUpdateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
   @GetMapping
-  public ResponseEntity<List<ProductResponseDto>> findAll() {
-    List<ProductResponseDto> responseDtoList = productService.findAll();
+  public ResponseEntity<List<ProductResponse>> findAll() {
+    List<ProductResponse> responseDtoList = productService.findAll();
     return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
   }
 
   @GetMapping("/{productId}")
-  public ResponseEntity<ProductResponseDto> findById(@PathVariable UUID productId) {
-    ProductResponseDto responseDto = productService.findById(productId);
+  public ResponseEntity<ProductResponse> findById(@PathVariable UUID productId) {
+    ProductResponse responseDto = productService.findById(productId);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
   @GetMapping("/name/{productName}")
-  public ResponseEntity<ProductResponseDto> findByName(@PathVariable String productName) {
-    ProductResponseDto responseDto = productService.findByName(productName);
+  public ResponseEntity<ProductResponse> findByName(@PathVariable String productName) {
+    ProductResponse responseDto = productService.findByName(productName);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 
   @GetMapping("/category/{category}")
-  public List<ProductResponseDto> findByCategory(@PathVariable Category category) {
+  public List<ProductResponse> findByCategory(@PathVariable Category category) {
     return productService.findByCategory(category);
   }
 

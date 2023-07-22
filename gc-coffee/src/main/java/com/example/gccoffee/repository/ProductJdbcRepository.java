@@ -1,6 +1,6 @@
 package com.example.gccoffee.repository;
 
-import com.example.gccoffee.dto.product.ProductUpdateDto;
+import com.example.gccoffee.dto.product.ProductUpdateRequest;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 import com.example.gccoffee.query.*;
@@ -45,35 +45,29 @@ public class ProductJdbcRepository implements ProductRepository {
             .addValue("category", product.getCategory().toString())
             .addValue("price", product.getPrice()
             );
-    int insertedProduct = jdbcTemplate.update(insertQuery
+    jdbcTemplate.update(insertQuery
                     .insert("products(product_id, product_name, category, price) ")
                     .values(":productId, :productName, :category, :price")
                     .getResult(),
             sqlParameterSource);
-    if (insertedProduct != 1) {
-      throw new RuntimeException("Nothing was inserted");
-    }
     return product;
   }
 
   @Override
-  public Product update(ProductUpdateDto productUpdateDto) {
+  public Product update(ProductUpdateRequest productUpdateDto) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
             .addValue("productId", productUpdateDto.productId().toString())
             .addValue("productName", productUpdateDto.productName())
             .addValue("category", productUpdateDto.category().toString())
             .addValue("price", productUpdateDto.price()
             );
-    int updatedProduct = jdbcTemplate.update(updateQuery
+    jdbcTemplate.update(updateQuery
                     .update("products")
                     .set("product_name = :productName, category = :category, price = :price")
                     .where("product_id = :productId")
                     .getResult(),
             sqlParameterSource
     );
-    if (updatedProduct != 1) {
-      throw new RuntimeException("Nothing was updated");
-    }
     return findById(productUpdateDto.productId()).get();
   }
 

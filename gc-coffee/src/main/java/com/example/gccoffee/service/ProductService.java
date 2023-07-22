@@ -1,9 +1,9 @@
 package com.example.gccoffee.service;
 
-import com.example.gccoffee.dto.product.ProductCreateDto;
+import com.example.gccoffee.dto.product.ProductCreateRequest;
 import com.example.gccoffee.dto.product.ProductMapper;
-import com.example.gccoffee.dto.product.ProductResponseDto;
-import com.example.gccoffee.dto.product.ProductUpdateDto;
+import com.example.gccoffee.dto.product.ProductResponse;
+import com.example.gccoffee.dto.product.ProductUpdateRequest;
 import com.example.gccoffee.model.Category;
 import com.example.gccoffee.model.Product;
 import com.example.gccoffee.repository.ProductRepository;
@@ -30,18 +30,18 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductResponseDto create(ProductCreateDto productCreateDto) {
-    productValidator.validName(productCreateDto.productName());
-    productValidator.validPrice(productCreateDto.price());
-    Category.findCategory(productCreateDto.category());
+  public ProductResponse create(ProductCreateRequest productCreateRequest) {
+    productValidator.validName(productCreateRequest.productName());
+    productValidator.validPrice(productCreateRequest.price());
+    Category.findCategory(productCreateRequest.category());
 
-    Product createdProduct = productMapper.toProduct(productCreateDto);
+    Product createdProduct = productMapper.toProduct(productCreateRequest);
     Product savedProduct = productRepository.insert(createdProduct);
     return productMapper.toResponse(savedProduct);
   }
 
   @Transactional
-  public ProductResponseDto update(ProductUpdateDto productUpdateDto) {
+  public ProductResponse update(ProductUpdateRequest productUpdateDto) {
     Optional<Product> product = productRepository.findById(productUpdateDto.productId());
     productValidator.validProduct(product);
 
@@ -52,28 +52,28 @@ public class ProductService {
     return productMapper.toResponse(updatedProduct);
   }
 
-  public List<ProductResponseDto> findAll() {
+  public List<ProductResponse> findAll() {
     return productRepository.findAll()
             .stream()
             .map(productMapper::toResponse)
             .toList();
   }
 
-  public ProductResponseDto findById(UUID productId) {
+  public ProductResponse findById(UUID productId) {
     Optional<Product> product = productRepository.findById(productId);
     productValidator.validProduct(product);
-    ProductResponseDto productResponseDto = productMapper.toResponse(product.get());
+    ProductResponse productResponseDto = productMapper.toResponse(product.get());
     return productResponseDto;
   }
 
-  public ProductResponseDto findByName(String productName) {
+  public ProductResponse findByName(String productName) {
     Optional<Product> product = productRepository.findByName(productName);
     productValidator.validProduct(product);
-    ProductResponseDto productResponseDto = productMapper.toResponse(product.get());
+    ProductResponse productResponseDto = productMapper.toResponse(product.get());
     return productResponseDto;
   }
 
-  public List<ProductResponseDto> findByCategory(Category category) {
+  public List<ProductResponse> findByCategory(Category category) {
     return productRepository.findByCategory(category)
             .stream()
             .map(productMapper::toResponse)
