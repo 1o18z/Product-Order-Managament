@@ -29,9 +29,9 @@ class ProductJdbcRepositoryTest {
 
   @Test
   @DisplayName("상품을 추가할 수 있다.")
-  void insertProduct_Success() {
-    productJdbcRepository.insert(firstProduct);
-    productJdbcRepository.insert(secondProduct);
+  void saveProduct_Success() {
+    productJdbcRepository.save(firstProduct);
+    productJdbcRepository.save(secondProduct);
 
     List<Product> products = productJdbcRepository.findAll();
 
@@ -41,7 +41,7 @@ class ProductJdbcRepositoryTest {
   @Test
   @DisplayName("상품을 이름으로 조회할 수 있다.")
   void findByName_Success() {
-    productJdbcRepository.insert(secondProduct);
+    productJdbcRepository.save(secondProduct);
 
     Optional<Product> findProduct = productJdbcRepository.findByName(secondProduct.getProductName());
     Product product = findProduct.get();
@@ -52,8 +52,8 @@ class ProductJdbcRepositoryTest {
   @Test
   @DisplayName("상품을 아이디로 조회할 수 있다.")
   void findById_Success() {
-    productJdbcRepository.insert(firstProduct);
-    productJdbcRepository.insert(secondProduct);
+    productJdbcRepository.save(firstProduct);
+    productJdbcRepository.save(secondProduct);
 
     Optional<Product> findProduct = productJdbcRepository.findById(firstProduct.getProductId());
     Product product = findProduct.get();
@@ -65,9 +65,9 @@ class ProductJdbcRepositoryTest {
   @DisplayName("상품을 카테고리로 조회할 수 있다.")
   void findByCategory_Success() {
     Category category = Category.COFFEE;
-    productJdbcRepository.insert(firstProduct);
-    productJdbcRepository.insert(secondProduct);
-    productJdbcRepository.insert(thridProduct);
+    productJdbcRepository.save(firstProduct);
+    productJdbcRepository.save(secondProduct);
+    productJdbcRepository.save(thridProduct);
 
     List<Product> findCategory = productJdbcRepository.findByCategory(category);
 
@@ -79,7 +79,7 @@ class ProductJdbcRepositoryTest {
   @Test
   @DisplayName("상품을 수정할 수 있다.")
   void updateProduct_Success() {
-    productJdbcRepository.insert(firstProduct);
+    productJdbcRepository.save(firstProduct);
 
     ProductUpdateRequest updateDto = new ProductUpdateRequest(firstProduct.getProductId(), "Test4", Category.COFFEE_DESSERT, 3500);
     Product product = productJdbcRepository.update(updateDto);
@@ -91,8 +91,8 @@ class ProductJdbcRepositoryTest {
   @Test
   @DisplayName("상품을 전체 삭제할 수 있다.")
   void deleteAll_Success() {
-    productJdbcRepository.insert(firstProduct);
-    productJdbcRepository.insert(secondProduct);
+    productJdbcRepository.save(firstProduct);
+    productJdbcRepository.save(secondProduct);
     int beforeSize = productJdbcRepository.findAll().size();
     Assertions.assertEquals(beforeSize, FIND_TEST_RESULT_SIZE);
 
@@ -106,8 +106,8 @@ class ProductJdbcRepositoryTest {
   @Test
   @DisplayName("상품을 아이디로 삭제할 수 있다.")
   void deleteById_Success() {
-    productJdbcRepository.insert(firstProduct);
-    productJdbcRepository.insert(secondProduct);
+    productJdbcRepository.save(firstProduct);
+    productJdbcRepository.save(secondProduct);
 
     productJdbcRepository.deleteById(firstProduct.getProductId());
 
