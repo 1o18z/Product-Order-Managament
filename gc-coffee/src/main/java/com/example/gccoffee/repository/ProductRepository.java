@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ProductRepository {
 
-  Product insert(Product product);
+  Product save(Product product);
 
   Product update(ProductUpdateRequest productUpdateDto);
 

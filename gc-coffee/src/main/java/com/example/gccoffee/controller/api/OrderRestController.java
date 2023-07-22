@@ -21,6 +21,8 @@ public class OrderRestController {
   }
 
   @PostMapping
+  public ResponseEntity<OrderResponse> create(@RequestBody OrderCreateRequest orderCreateDto) {
+    OrderResponse responseDto = orderService.create(orderCreateDto);
   public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderCreateDto orderCreateDto) {
     OrderResponseDto responseDto = orderService.create(orderCreateDto);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
@@ -41,7 +43,7 @@ public class OrderRestController {
   @DeleteMapping("/{orderId}")
   public ResponseEntity<Void> cancel(@PathVariable UUID orderId) {
     orderService.cancel(orderId);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @DeleteMapping

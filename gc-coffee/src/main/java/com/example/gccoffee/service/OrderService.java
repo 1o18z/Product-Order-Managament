@@ -41,7 +41,7 @@ public class OrderService {
     orderValidator.validEmail(orderCreateDto.email());
 
     Order createdOrder = orderMapper.toOrder(orderCreateDto);
-    Order savedOrder = orderRepository.insert(createdOrder);
+    Order savedOrder = orderRepository.save(createdOrder);
 
     List<OrderItemCreateDto> orderItems = orderCreateDto.orderItems();
     List<OrderItem> orderItemList = new ArrayList<>();
@@ -51,7 +51,7 @@ public class OrderService {
       orderItemList.add(orderItem);
     }
 
-    orderItemRepository.add(orderItemList);
+    orderItemRepository.save(orderItemList);
     return orderMapper.toResponse(savedOrder);
   }
 
@@ -73,12 +73,15 @@ public class OrderService {
   public void cancel(UUID orderId) {
     Optional<Order> order = orderRepository.findById(orderId);
     orderValidator.validOrder(order);
+
+    orderItemRepository.deleteOrderItems(orderId);
     orderRepository.cancel(orderId);
   }
 
   @Transactional
   public void deleteAll() {
     orderRepository.deleteAll();
+    orderItemRepository.deleteAllOrderItems();
   }
 
 }

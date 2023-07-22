@@ -7,6 +7,10 @@ import java.util.UUID;
 
 public interface OrderItemRepository {
 
-  UUID add(List<OrderItem> orderItems);
+  UUID save(List<OrderItem> orderItems);
+
+  void deleteOrderItems(UUID orderId);
+
+  void deleteAllOrderItems();
 
 }

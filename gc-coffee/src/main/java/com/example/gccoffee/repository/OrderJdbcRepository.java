@@ -27,7 +27,7 @@ public class OrderJdbcRepository implements OrderRepository {
   }
 
   @Override
-  public Order insert(Order order) {
+  public Order save(Order order) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
             .addValue("orderId", order.getOrderId().toString())
             .addValue("email", order.getEmail())
@@ -73,7 +73,8 @@ public class OrderJdbcRepository implements OrderRepository {
                     .delete("orders")
                     .where("order_id = :orderId")
                     .getResult(),
-            Collections.emptyMap());
+            Map.of("orderId", orderId)
+    );
   }
 
   @Override

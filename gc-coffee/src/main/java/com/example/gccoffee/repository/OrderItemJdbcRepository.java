@@ -1,14 +1,16 @@
 package com.example.gccoffee.repository;
 
 import com.example.gccoffee.model.OrderItem;
+import com.example.gccoffee.query.DeleteQuery;
 import com.example.gccoffee.query.InsertQuery;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -16,13 +18,14 @@ public class OrderItemJdbcRepository implements OrderItemRepository {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final InsertQuery insertQuery = new InsertQuery();
+  private final DeleteQuery deleteQuery = new DeleteQuery();
 
   public OrderItemJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
   @Override
-  public UUID add(List<OrderItem> orderItems) {
+  public UUID save(List<OrderItem> orderItems) {
     SqlParameterSource[] sqlParameterSources = new SqlParameterSource[orderItems.size()];
     int idx = 0;
     for (OrderItem orderItem : orderItems) {
@@ -43,15 +46,22 @@ public class OrderItemJdbcRepository implements OrderItemRepository {
     return orderItems.get(0).getOrderItemId();
   }
 
-  private final RowMapper<OrderItem> orderItemRowMapper = (resultSet, rowNum) -> {
-
-    OrderItem orderItem = new OrderItem(
-            UUID.fromString(resultSet.getString("order_item_id")),
-            UUID.fromString(resultSet.getString("order_id")),
-            UUID.fromString(resultSet.getString("product_id")),
-            resultSet.getInt("quantity")
+  @Override
+  public void deleteOrderItems(UUID orderId){
+    jdbcTemplate.update(deleteQuery
+                    .delete("order_items")
+                    .where("order_id = :orderId")
+                    .getResult(),
+            Map.of("orderId", orderId)
     );
-    return orderItem;
-  };
+  }
+  @Override
+  public void deleteAllOrderItems() {
+    jdbcTemplate.update(deleteQuery
+                    .delete("order_items")
+                    .getResult(),
+            Collections.emptyMap());
+  }
 
 }
+

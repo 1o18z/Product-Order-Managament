@@ -38,7 +38,7 @@ public class ProductJdbcRepository implements ProductRepository {
   }
 
   @Override
-  public Product insert(Product product) {
+  public Product save(Product product) {
     SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
             .addValue("productId", product.getProductId().toString())
             .addValue("productName", product.getProductName())

@@ -12,8 +12,8 @@ public class OrderItemMapper {
     return new OrderItem(
             UUID.randomUUID(),
             orderId,
-            createDto.getProductId(),
-            createDto.getQuantity()
+            createDto.productId(),
+            createDto.quantity()
     );
   }
 

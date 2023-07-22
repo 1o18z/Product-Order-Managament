@@ -37,6 +37,8 @@ public class ProductService {
 
     Product createdProduct = productMapper.toProduct(productCreateRequest);
     Product savedProduct = productRepository.insert(createdProduct);
+    Product createdProduct = productMapper.toProduct(productCreateDto);
+    Product savedProduct = productRepository.save(createdProduct);
     return productMapper.toResponse(savedProduct);
   }
 
