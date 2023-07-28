@@ -1,37 +1,28 @@
 package com.example.gccoffee.model;
 
-import com.example.gccoffee.validator.OrderValidator;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
+@Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
-  private final UUID orderId;
-  private final String email;
-  private final String address;
-  private final OrderStatus orderStatus;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long orderId;
 
-  public Order(UUID orderId, String email, String address, OrderStatus orderStatus) {
-    OrderValidator.validId(orderId);
-    this.orderId = orderId;
-    this.email = email;
-    this.address = address;
-    this.orderStatus = orderStatus;
-  }
+  @Email
+  @Column(nullable = false)
+  private String email;
 
-  public UUID getOrderId() {
-    return orderId;
-  }
+  @Column(nullable = false)
+  private String address;
 
-  public String getEmail() {
-    return email;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public OrderStatus getOrderStatus() {
-    return orderStatus;
-  }
+  @Column(nullable = false)
+  private OrderStatus orderStatus;
 
 }
